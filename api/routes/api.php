@@ -21,7 +21,7 @@ Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     Route::post('login', 'login');
 });
 
-Route::middleware(['auth:sanctum', 'abilitiy:weather,website'])->group( function () {
+Route::middleware(['auth:sanctum', 'ability:weather,website'])->group( function () {
     //protected routes
     Route::get('weather', 'App\Http\Controllers\WeatherdataController@index');
     Route::get('weather/{id}', 'App\Http\Controllers\WeatherdataController@show');
