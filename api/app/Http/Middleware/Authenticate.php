@@ -16,7 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return 'Unautherized';
+           // return 'https://stackoverflow.com/questions/10815203/how-to-update-git-clone';
         }
     }
 }

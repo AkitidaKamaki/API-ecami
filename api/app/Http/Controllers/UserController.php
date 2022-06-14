@@ -32,7 +32,7 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         if($user->isAdmin == 1){
-            $success['token'] =  $user->createToken('MyApp', ['website'])->plainTextToken;
+            $success['token'] =  $user->createToken('MyApp', ['website','weather', 'userinfo'])->plainTextToken;
         }
         else {
             $success['token'] =  $user->createToken('MyApp', ['weather', 'userinfo'])->plainTextToken;
@@ -48,7 +48,7 @@ class UserController extends Controller
             $user = Auth::user();
             $user->tokens()->delete();
             if($user->isAdmin == 1){
-                $success['token'] =  $user->createToken('MyApp', ['website'])->plainTextToken;
+                $success['token'] =  $user->createToken('MyApp', ['website','weather', 'userinfo'])->plainTextToken;
             }
             else {
                 $success['token'] =  $user->createToken('MyApp', ['weather', 'userinfo'])->plainTextToken;
