@@ -26,6 +26,7 @@ Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     Route::get('weather', 'App\Http\Controllers\WeatherdataController@index');
     Route::get('weather/{id}', 'App\Http\Controllers\WeatherdataController@show');
     Route::get('weather/station/{station_name}', 'App\Http\Controllers\WeatherdataController@search');
+    Route::get('weather/station/', 'App\Http\Controllers\WeatherdataController@getall');
     Route::get('weather/{date}', 'App\Http\Controllers\WeatherdataController@searchDate');
     Route::get('weather/{date}/{time}', 'App\Http\Controllers\WeatherdataController@searchTime');
     Route::get('weather/station/{station_name}/{date}', 'App\Http\Controllers\WeatherdataController@searchStationDate');

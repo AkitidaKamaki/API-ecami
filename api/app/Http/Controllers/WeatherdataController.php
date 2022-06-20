@@ -32,6 +32,12 @@ class WeatherdataController extends Controller
         return response()->json($weatherdata, 200);
     }
 
+    public function getall()
+    {
+        $weatherdata = DB::connection('mysql1')->select('SELECT Station_name FROM Weatherdata');
+        return response()->json($weatherdata, 200);
+    }
+
     public function getData(Request $request)
     {
         $collection = collect($request);
@@ -175,6 +181,7 @@ class WeatherdataController extends Controller
         //$selectiveData = $selectiveData->where("Station_name", $station_name)->get();
         $editdata = null;
         $listsoflists = [];
+        $giveninfo = [];
         foreach ($notGivenKeyList as $checkkey){
             $listOfKey = [];
             foreach ($data as $element){
