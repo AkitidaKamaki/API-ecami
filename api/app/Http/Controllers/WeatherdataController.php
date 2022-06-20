@@ -16,7 +16,7 @@ class WeatherdataController extends Controller
 {
     public function index()
     {
-        $weatherdata = DB::connection('mysql1')->select('SELECT * FROM Weatherdata');
+        $weatherdata = DB::connection('mysql1')->select('SELECT Station_name FROM Weatherdata');
         return response()->json($weatherdata, 200);
     }
 
@@ -32,9 +32,18 @@ class WeatherdataController extends Controller
         return response()->json($weatherdata, 200);
     }
 
-    public function getall()
+    public function search2()
     {
-        $weatherdata = DB::connection('mysql1')->select('SELECT Station_name FROM Weatherdata');
+        $weatherdata = DB::connection('mysql1')->select('SELECT * FROM Weatherdata');
+        return response()->json($weatherdata, 200);
+    }
+
+    public function recent($station_name)
+    {
+        $timestamp_ago = 10;
+        $past_time = time() - $timestamp_ago;
+        $weatherdata = DB::connection('mysql1')->table('Weatherdata');
+        $weatherdata->select('*')->where('timestamp', '<=', $past_time)->get();
         return response()->json($weatherdata, 200);
     }
 
