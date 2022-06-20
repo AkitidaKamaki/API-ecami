@@ -26,7 +26,7 @@ class WeatherdataController extends Controller
         return response()->json($weatherdata, 200);
     }
 
-    public function search($station_name, $type)
+    public function search($station_name)
     {
         $weatherdata = DB::connection('mysql1')->select('SELECT * FROM Weatherdata WHERE Station_name = :station_name', ['station_name' => $station_name]);
         return response()->json($weatherdata, 200);
@@ -108,6 +108,7 @@ class WeatherdataController extends Controller
         $keys = $collection->keys();
         $keyList = [];
         $givenKeyList = [];
+        $notGivenKeyList = [];
         $datef = '';
         $datet = '';
         $timestampf = '';
@@ -139,6 +140,10 @@ class WeatherdataController extends Controller
                 if($collection[$key] != ''){
                     $givenKeyList[] = $key;
                 }
+
+                if($collection[$key] == ''){
+                    $notGivenKeyList[] = $key;
+                }
                 $keyList[] = $key;
             }
         }
@@ -169,12 +174,18 @@ class WeatherdataController extends Controller
         $data = $selectiveData->get();
         //$selectiveData = $selectiveData->where("Station_name", $station_name)->get();
         $editdata = null;
-
-        foreach ($keyList as $checkkey){
-            foreach ($givenKeyList as $givenCheckKey){
-
+        $listsoflists = [];
+        foreach ($notGivenKeyList as $checkkey){
+            $listOfKey = [];
+            foreach ($data as $element){
+                $listOfKey[] = $element->$checkkey;
             }
+            $listsoflists[$checkkey] = $listOfKey;
         }
+        foreach ($givenKeyList as $givenkeys){
+            $giveninfo[$givenkeys] = $collection[$givenkeys];
+        }
+        $editdata = $giveninfo + $listsoflists;
 
         return response()->json($editdata, 200);
 
