@@ -31,8 +31,9 @@ Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     Route::get('weather/station/{station_name}/{date}/{time}', 'App\Http\Controllers\WeatherdataController@searchStationDateTime');
     Route::post('weather/getData', 'App\Http\Controllers\WeatherdataController@getData');
 
-Route::middleware(['auth:sanctum', 'abilities:userinfo'])->group( function () {
+Route::middleware(['auth:sanctum'])->group( function () {
     //protected routes
+    Route::get('weather/{id}', 'App\Http\Controllers\WeatherdataController@show');
 });
 
     //protected routes

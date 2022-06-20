@@ -20,8 +20,6 @@ class User extends Authenticatable
      */
     use \App\Traits\uuid;
 
-    protected $connection = 'mysql2';
-
     protected $fillable = [
         'first_name',
         'last_name',
