@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Helpers\WeatherStationKeyEnum;
 use mysql_xdevapi\Exception;
+use function MongoDB\BSON\toJSON;
+use function PHPUnit\Framework\isJson;
 
 class WeatherdataController extends Controller
 {
@@ -97,6 +99,84 @@ class WeatherdataController extends Controller
         $data = $selectiveData->get();
         //$selectiveData = $selectiveData->where("Station_name", $station_name)->get();
         return response()->json($data, 200);
+
+    }
+
+    public function getAdvData(Request $request)
+    {
+        $collection = collect($request);
+        $keys = $collection->keys();
+        $keyList = [];
+        $givenKeyList = [];
+        $datef = '';
+        $datet = '';
+        $timestampf = '';
+        $timestampt = '';
+        $timestamp_ago = '';
+        foreach ($keys as $key) {
+            if (WeatherStationKeyEnum::isValidName($key)) {
+                if($key == 'Date_from'){
+                    $datef = $collection[$key];
+                    continue;
+                }
+                if($key == 'Date_to'){
+                    $datet = $collection[$key];
+                    continue;
+                }
+                if($key == 'timestamp_from'){
+                    $timestampf = $collection[$key];
+                    continue;
+                }
+                if($key == 'timestamp_to'){
+                    $timestampt = $collection[$key];
+                    continue;
+                }
+                if($key == 'timestamp_ago'){
+                    $timestamp_ago = $collection[$key];
+                    continue;
+                }
+
+                if($collection[$key] != ''){
+                    $givenKeyList[] = $key;
+                }
+                $keyList[] = $key;
+            }
+        }
+        $selectiveData = DB::connection('mysql1')->table('Weatherdata');
+        foreach ($keyList as $key) {
+            $selectiveData = $selectiveData->addSelect($key);
+        }
+        foreach ($givenKeyList as $givenKey) {
+            $selectiveData = $selectiveData->where($givenKey, $collection[$givenKey]);
+        }
+
+        if($datef != ''){
+            $selectiveData = $selectiveData->whereDate('Date', '>=', Date($datef));
+        }
+        if($datet != ''){
+            $selectiveData = $selectiveData->whereDate('Date', '<=', Date($datet));
+        }
+        if($timestampf != ''){
+            $selectiveData = $selectiveData->where('timestamp', '<=', $timestampf);
+        }
+        if($timestampt != ''){
+            $selectiveData = $selectiveData->where('timestamp', '<=', $timestampt);
+        }
+        if($timestamp_ago != ''){
+            $past_time = time() - $timestamp_ago;
+            $selectiveData = $selectiveData->where('timestamp', '<=', $past_time);
+        }
+        $data = $selectiveData->get();
+        //$selectiveData = $selectiveData->where("Station_name", $station_name)->get();
+        $editdata = null;
+
+        foreach ($keyList as $checkkey){
+            foreach ($givenKeyList as $givenCheckKey){
+
+            }
+        }
+
+        return response()->json($editdata, 200);
 
     }
 
