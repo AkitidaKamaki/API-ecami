@@ -20,7 +20,8 @@ Use app\Models;
 Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     Route::post('login', 'login');
 });
-//, 'abilities:weather'
+
+Route::middleware(['auth:sanctum', 'ability:weather,website'])->group( function () {
     //protected routes
     Route::get('weather', 'App\Http\Controllers\WeatherdataController@index');
     Route::get('weather/{id}', 'App\Http\Controllers\WeatherdataController@show');
@@ -30,13 +31,15 @@ Route::controller(App\Http\Controllers\UserController::class)->group(function(){
     Route::get('weather/station/{station_name}/{date}', 'App\Http\Controllers\WeatherdataController@searchStationDate');
     Route::get('weather/station/{station_name}/{date}/{time}', 'App\Http\Controllers\WeatherdataController@searchStationDateTime');
     Route::post('weather/getData', 'App\Http\Controllers\WeatherdataController@getData');
-
-Route::middleware(['auth:sanctum'])->group( function () {
-    //protected routes
-    Route::get('weather/{id}', 'App\Http\Controllers\WeatherdataController@show');
 });
 
+Route::middleware(['auth:sanctum', 'ability:userinfo,website'])->group( function () {
+    //protected routes
+});
+
+Route::middleware(['auth:sanctum', 'abilities:website'])->group( function () {
     //protected routes
     Route::post('register', 'App\Http\Controllers\UserController@register');
     Route::post('weather', 'App\Http\Controllers\WeatherdataController@store');
+});
 //TODO Get allowed stations
