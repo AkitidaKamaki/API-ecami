@@ -43,7 +43,7 @@ class WeatherdataController extends Controller
         $timestamp_ago = 10;
         $past_time = time() - $timestamp_ago;
         $weatherdata = DB::connection('mysql1')->table('Weatherdata');
-        $weatherdata->select('*')->where('timestamp', '<=', $past_time)->get();
+        $weatherdata->select('*')->where('timestamp', '<=', $past_time);
         return response()->json($weatherdata, 200);
     }
 
