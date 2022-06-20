@@ -23,7 +23,7 @@ Route::controller(App\Http\Controllers\UserController::class)->group(function(){
 
 //Route::middleware(['auth:sanctum', 'ability:weather,website'])->group( function () {
     //protected routes
-Route:get('weather/recent/{station_name}','App\Htrp\ontrollers\WeatherdataController@recent');
+Route::get('weather/recent/{station_name}','App\Htrp\ontrollers\WeatherdataController@recent');
     Route::get('weather', 'App\Http\Controllers\WeatherdataController@index');
     Route::get('weather/{id}', 'App\Http\Controllers\WeatherdataController@show');
     Route::get('weather/station/{station_name}', 'App\Http\Controllers\WeatherdataController@search');
